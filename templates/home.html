@@ -1,6 +1,13 @@
 {% extends 'layouts/main.html' %}
 
 {% block content %}
-    <h3>This is the home template </h3>
-    <p>welcome to the home page </p>
+    {% for rooms in room %}
+    <p>{{rooms.name}}</p>
+    <p>{{rooms.description}}</p>
+    <a href="{% url 'update-room' rooms.id %}">Edit</a>
+    <a href="{% url 'delete-room' rooms.id %}">Delete</a>
+    <a href="{% url 'create-room' %}">Create</a>
+
+    <hr>
+    {% endfor %}
 {% endblock %}
