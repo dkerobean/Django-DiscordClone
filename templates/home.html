@@ -2,6 +2,13 @@
 
 {% block content %}
 
+{% if request.user.is_authenticated %}
+<p>hello {{request.user}}</p>
+<a href="{% url 'logout-user' %}">Logout</a>
+{% endif %}
+
+
+
 <style>
   .home{
     display: grid;
@@ -27,7 +34,7 @@
 
 <div class="">
   {% for rooms in room %}
-  <p>{{rooms.name}}</p>
+  <a href="{% url 'show-room' rooms.id %}"> <p>{{rooms.name}}</p></a>
   <p>{{rooms.description}}</p>
   {% if request.user == rooms.host %}
   <a href="{% url 'update-room' rooms.id %}">Edit</a>

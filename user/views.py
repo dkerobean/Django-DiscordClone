@@ -9,7 +9,7 @@ from django.contrib import messages
 # Create your views here.
 
 def loginUser(request):
-    page == 'login'
+    page = 'login'
 
     if request.user.is_authenticated:
         return redirect('home')

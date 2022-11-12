@@ -1,0 +1,46 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+
+<style media="screen">
+  .room-container{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+  }
+</style>
+<div class="room-container">
+  <div class="">
+    <h1>{{ room.name }}</h1>
+    <p>{{ room.description }}</p>
+
+    <div class="comment-wrapper">
+      <h3>conversation</h3>
+      <hr>
+
+      {% for message in room_messages %}
+      <div class="">
+        <small>@{{message.user}}  {{message.created|timesince}} ago</small>
+        <h4>{{message.body}}</h4>
+        <hr>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <form  action="" method="POST">
+    {% csrf_token%}
+    <input type="text" name="message" placeholder="Type message here...">
+    <input type="submit" name="" value="send">
+    </form>
+    {% endif %}
+  </div>
+
+  <div class="participants">
+    <h3>Participants</h3>
+    <hr>
+    {% for users in participants%}
+    <p>@{{users.username}}</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

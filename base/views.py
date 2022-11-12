@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import RoomForm
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .utils import searchRooms
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -24,6 +24,30 @@ def home(request):
         'room_count':room_count
     }
     return render(request, 'home.html', context)
+
+
+def showRoom(request, pk):
+    room = Room.objects.get(id=pk)
+    room_messages = room.message_set.all().order_by('-created')
+    participants = room.participants.all()
+
+    if request.method == 'POST':
+        user_message = Message.objects.create(
+            user = request.user,
+            room = room,
+            body = request.POST.get('message')
+        )
+        room.participants.add(request.user)
+        messages.success(request, 'Message Sent')
+        return redirect('show-room', pk=room.id)
+
+
+    context = {
+        'room':room,
+        'room_messages': room_messages,
+        'participants': participants
+    }
+    return render(request, 'base/room.html', context)
 
 @login_required(login_url='login-user')
 def createRoom(request):
