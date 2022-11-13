@@ -1,0 +1,11 @@
+{% for rooms in room %}
+<a href="{% url 'show-room' rooms.id %}"> <p>{{rooms.name}}</p></a>
+<p>{{rooms.description}}</p>
+{% if request.user == rooms.host %}
+<a href="{% url 'update-room' rooms.id %}">Edit</a>
+<a href="{% url 'delete-room' rooms.id %}">Delete</a>
+{% endif %}
+<a href="{% url 'create-room' %}">Create</a>
+
+<hr>
+{% endfor %}

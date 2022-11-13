@@ -4,6 +4,7 @@ from .models import Room, Topic, Message
 from .utils import searchRooms
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 
 
 
@@ -17,18 +18,22 @@ def home(request):
     query, room = searchRooms(request)
 
     room_count = room.count()
+    room_messages = Message.objects.filter(
+    Q(room__topic__name__icontains=query))
 
     context = {
         'room':room,
         'topics':topics,
-        'room_count':room_count
+        'room_count':room_count,
+        'room_messages':room_messages
     }
+
     return render(request, 'home.html', context)
 
 
 def showRoom(request, pk):
     room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all().order_by('-created')
+    room_messages = room.message_set.all()
     participants = room.participants.all()
 
     if request.method == 'POST':
@@ -97,5 +102,22 @@ def deleteRoom(request,pk):
         return redirect('home')
     context = {
         'object':room
+    }
+    return render(request, 'base/delete_form.html', context)
+
+
+@login_required(login_url='login-user')
+def deleteMessage(request,pk):
+    message = Message.objects.get(id=pk)
+
+    if request.user != message.user:
+        messages.error(request, 'You do not have rights to perform this operation')
+        return redirect('home')
+
+    if request.method == 'POST':
+        message.delete()
+        return redirect('home')
+    context = {
+        'object':message
     }
     return render(request, 'base/delete_form.html', context)
