@@ -1,4 +1,5 @@
 {% for rooms in room %}
+<a href="{%  url 'profile' rooms.host.id %}">@{{rooms.host.username}}</a>
 <a href="{% url 'show-room' rooms.id %}"> <p>{{rooms.name}}</p></a>
 <p>{{rooms.description}}</p>
 {% if request.user == rooms.host %}

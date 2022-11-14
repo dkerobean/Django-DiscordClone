@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from base.models import Topic, Message
 
 
 # Create your views here.
@@ -64,3 +65,19 @@ def registerUser(request):
 def logoutUser(request):
     logout(request)
     return redierect('home')
+
+
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    room = user.room_set.all()
+    topics = Topic.objects.all()
+    room_messages = user.message_set.all()
+
+    context = {
+        'user':user,
+        'room':room,
+        'topics':topics,
+        'room_messages':room_messages
+
+    }
+    return render(request, 'user/profile.html', context)
