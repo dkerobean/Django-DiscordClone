@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from base.models import Topic, Message
+from django.contrib.auth.decorators import login_required
+from .forms import UserForm
 
 
 # Create your views here.
@@ -64,7 +66,7 @@ def registerUser(request):
 
 def logoutUser(request):
     logout(request)
-    return redierect('home')
+    return redirect('home')
 
 
 def userProfile(request, pk):
@@ -72,12 +74,32 @@ def userProfile(request, pk):
     room = user.room_set.all()
     topics = Topic.objects.all()
     room_messages = user.message_set.all()
+    topic_count = Topic.objects.all().count()
 
     context = {
         'user':user,
         'room':room,
         'topics':topics,
+        'topic_count':topic_count,
         'room_messages':room_messages
 
     }
     return render(request, 'user/profile.html', context)
+
+@login_required(login_url='login-user')
+def updateUser(request):
+    user = request.user
+
+    form = UserForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', pk=user.id)
+
+    context = {
+    'form':form
+    }
+
+    return render(request, 'user/update_user.html',context)

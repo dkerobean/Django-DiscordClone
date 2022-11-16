@@ -13,4 +13,9 @@ urlpatterns = [
 
     path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
 
+    path('topics/', views.mobileTopics, name="mobile-topics"),
+    path('activity/', views.showActivity, name="activity"),
+
+
+
 ]
