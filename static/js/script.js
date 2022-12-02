@@ -44,6 +44,28 @@
 
 // Menu
 
+$(".close").click(function() {
+  $(this)
+    .parent(".alert")
+    .fadeOut();
+});
+
+
+// Invoke Functions Call on Document Loaded
+document.addEventListener('DOMContentLoaded', function () {
+  hljs.highlightAll();
+});
+
+
+let alertWrapper = document.querySelector('.alert')
+let alertClose = document.querySelector('.alert__close')
+
+if (alertWrapper) {
+  alertClose.addEventListener('click', () =>
+    alertWrapper.style.display = 'none'
+  )
+}
+
 const dropdownMenu = document.querySelector(".dropdown-menu");
 const dropdownButton = document.querySelector(".dropdown-button");
 

@@ -19,8 +19,8 @@
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group form__group">
-            <label for="room_name">Username</label>
-            <input id="username" name="username" type="text" placeholder="Enter username" />
+            <label for="room_name">Email</label>
+            <input id="username" name="email" type="email" placeholder="Enter username" />
           </div>
           <div class="form__group">
             <label for="password">Password</label>
@@ -83,6 +83,11 @@
           <div class="form__group form__group">
             <label for="fullname">{{field.label}}</label>
             {{field}}
+            {% for error in field.errors %}
+              <p style="color:red; "> {{error}}</p>
+            {% endfor %}
+
+
 
           </div>
           {% endfor %}

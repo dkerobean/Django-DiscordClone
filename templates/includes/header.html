@@ -18,15 +18,14 @@
     </form>
     <nav class="header__menu">
 
-
       <!-- Logged In -->
       {% if request.user.is_authenticated %}
       <div class="header__user">
         <a href="{% url 'profile' user.id %}">
           <div class="avatar avatar--medium active">
-            <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+            <img src="{{user.avatar.url}}" />
           </div>
-          <p>{{request.user.username}} <span>@{{request.user.username}}</span></p>
+          <p>{{request.user.name}} <span>@{{request.user.username}}</span></p>
         </a>
         <button class="dropdown-button">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
@@ -71,3 +70,7 @@
     </nav>
   </div>
 </header>
+
+<div style = "position:absolute; right:80px; top:80px;" class="">
+  {% include 'includes/alert.html' %}
+</div>

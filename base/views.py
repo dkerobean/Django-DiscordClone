@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import RoomForm
-from .models import Room, Topic, Message
+from .models import Room, Topic, Message, User
 from .utils import searchRooms
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -45,7 +45,6 @@ def showRoom(request, pk):
             body = request.POST.get('message')
         )
         room.participants.add(request.user)
-        messages.success(request, 'Message Sent')
         return redirect('show-room', pk=room.id)
 
 
@@ -72,6 +71,7 @@ def createRoom(request):
             description = request.POST.get('description')
 
         )
+        messages.success(request, 'Room Created Successfully')
         return redirect('home')
         # form = RoomForm(request.POST)
         # if form.is_valid():
@@ -107,6 +107,7 @@ def updateRoom(request,pk):
         room.description = request.POST.get('description')
         room.save()
 
+        messages.success(request, 'Room Updated')
         return redirect('home')
 
         # form = room = RoomForm(request.POST, instance = room)
@@ -154,6 +155,7 @@ def deleteMessage(request,pk):
         'object':message
     }
     return render(request, 'base/delete_form.html', context)
+
 
 
 def mobileTopics(request):
